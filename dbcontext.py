@@ -145,34 +145,3 @@ class StudentsDb:
         except Exception as e:
             print(f'Произошла ошибка: {e}')
 
-    # добавить пользователя
-    def insert_user(self, email: str, password: str):
-        with Session(autoflush=False, bind=self.engine) as db:
-            user = User(email=email, password=password)
-            db.add(user)
-            db.commit()
-
-    # активация сессии пользователя (при авторизации)
-    def activate_user_session(self, user_id: int):
-        with Session(autoflush=False, bind=self.engine) as db:
-            user = db.query(User).filter_by(id=user_id).first()
-            if user:
-                user.is_active = True
-                db.commit()
-
-    # деактивация сессии пользователя (при выходе)
-    def deactivate_user_session(self, user_id: int):
-        with Session(autoflush=False, bind=self.engine) as db:
-            user = db.query(User).filter_by(id=user_id).first()
-            if user:
-                user.is_active = False
-                db.commit()
-    # получения пользователя по ID
-    def get_user_by_id(self, user_id: int):
-        with Session(autoflush=False, bind=self.engine) as db:
-            return db.query(User).filter_by(id=user_id).first()
-
-    # доступ к записи пользователя по email
-    def get_user_by_email(self, email: str):
-        with Session(autoflush=False, bind=self.engine) as db:
-            return db.query(User).filter_by(email=email).first()
